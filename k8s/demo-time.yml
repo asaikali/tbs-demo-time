@@ -1,0 +1,67 @@
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: demo
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-time
+  namespace: demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: demo-time
+  template:
+    metadata:
+      labels:
+        app: demo-time
+    spec:
+      volumes:
+        - name: demo-config-volume
+          configMap:
+            name: demo-configmap
+      # serviceAccountName: "spring-cloud"
+      containers:
+        - image: "asaikalidemo.azurecr.io/demo-time:latest"
+          imagePullPolicy: Always
+          volumeMounts:
+            - mountPath: /myconfigs
+              name: demo-config-volume
+          name: demo-time
+          ports:
+            - containerPort: 8080
+          livenessProbe:
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            httpGet:
+              port: 8080
+              path: /actuator/health/liveness
+          readinessProbe:
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            httpGet:
+              port: 8080
+              path: /actuator/health/readiness
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: demo-time
+  name: demo-time
+  namespace: config-examples
+spec:
+  ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: demo-time
+  type: NodePort
+
+
+
