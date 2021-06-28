@@ -11,6 +11,6 @@ public class HelloController {
 
     @GetMapping("/")
     public String get() {
-        return "Version : 1, time: " + LocalDateTime.now();
+        return "Version : 2, time: " + LocalDateTime.now();
     }
 }

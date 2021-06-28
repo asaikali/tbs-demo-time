@@ -24,12 +24,11 @@ spec:
           configMap:
             name: demo-configmap
       # serviceAccountName: "spring-cloud"
+      imagePullSecrets:
+        - name: acr-creds
       containers:
         - image: "asaikalidemo.azurecr.io/demo-time:latest"
           imagePullPolicy: Always
-          volumeMounts:
-            - mountPath: /myconfigs
-              name: demo-config-volume
           name: demo-time
           ports:
             - containerPort: 8080
@@ -53,7 +52,7 @@ metadata:
   labels:
     app: demo-time
   name: demo-time
-  namespace: config-examples
+  namespace: demo
 spec:
   ports:
     - port: 8080
