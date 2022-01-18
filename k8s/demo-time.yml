@@ -27,7 +27,7 @@ spec:
       imagePullSecrets:
         - name: acr-creds
       containers:
-        - image: "asaikalidemo.azurecr.io/demo-time:latest"
+        - image: "tapdemo.azurecr.io/demo-time:latest"
           imagePullPolicy: Always
           name: demo-time
           ports:
